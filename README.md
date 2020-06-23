@@ -15,3 +15,7 @@ Library book seat selection system use B/S architecture model, using c# language
 ![](https://github.com/dn717/Library-Seat-Selection-System/blob/master/5.jpg)
 ### Administrator--Seat selection information
 ![](https://github.com/dn717/Library-Seat-Selection-System/blob/master/6.jpg)
+### Modify reading room information
+![](https://github.com/dn717/Library-Seat-Selection-System/blob/master/7.jpg)
+
+### main code file includes the main code, Omit some unimportant parts
