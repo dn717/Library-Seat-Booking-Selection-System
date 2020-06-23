@@ -205,3 +205,42 @@ for (int i = 1; i < x+1; i++)
        this.Page.FindControl("PlaceHolder1").FindControl("linkBtn");
 
 '''
+#The card reader reads the data code
+protected void Timer1_Tick(object sender, EventArgs e)
+    {
+        Label1.Text = DateTime.Now.ToString();
+        this.TextBox1.Focus();
+        string username = this.TextBox1.Text.Trim();
+        DateTime time = DateTime.Now;
+        if (username != "")
+        {
+            SeatChoosing seat = new SeatChoosingService().Get_Objec("UserName='" + username + "'and '" + time + "'<=Time");
+            {
+                Session["rid"] = seat.Rid;
+                Session["sid"] = seat.Sid;
+                Session["time"] = seat.Time;
+                Seat seat1 = new Seat();
+                seat1.Status = 2;
+                seat1.Rid = seat.Rid;
+                seat1.Sid = seat.Sid;
+                bool s1 = new SeatService().ModifyStatus(seat1);
+                TextBox1.Text = "";
+
+            }
+            else
+            {
+                DBHelper db = new DBHelper();
+                string sql = "select * from Seat_choosing where UserName='" + username + "'";
+                DbCommand dbcmd = db.GetSqlStringCommond(sql);
+                DbDataReader dr = db.ExecuteReader(dbcmd);
+                if (dr.HasRows == false)//未检测到dr返回的数据中的某行记录
+                {
+                    Page.RegisterStartupScript("", "<script>alert('未预定座位');</script>");
+                }
+                TextBox1.Text = "";//清空文本框数据
+            }
+            
+        }
+
+}
+
