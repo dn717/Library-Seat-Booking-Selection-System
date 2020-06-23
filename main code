@@ -101,13 +101,12 @@ protected void Button1_Click(object sender, EventArgs e)
         SeatChoosingService myseatchoosingService = new SeatChoosingService();
         myseatchoosing.UserName = Session["UserName"].ToString();
         string username = Session["UserName"].ToString();
-        SeatChoosing mysc = new SeatChoosingService().Get_Objec("UserName='" + username + "'");//声明新的SeatChoosing类的对象mysc中的值获取当前用户的选座表Seat_choosing中的信息
-        Seat seat1 = new Seat();
+        SeatChoosing mysc = new SeatChoosingService().Get_Objec("UserName='" + username + "'");
         seat1.Status = 0;
         seat1.Rid = mysc.Rid;
         seat1.Sid = mysc.Sid;
         bool s1 = new SeatService().ModifyStatus(seat1);//修改Seat表座位状态值为0
-        bool f = new SeatChoosingService().Delete("UserName='"+myseatchoosing.UserName+"'");//删除Seat_choosing表中该用户的座位信息
+        bool f = new SeatChoosingService().Delete("UserName='"+myseatchoosing.UserName+"'");
         if (f)
         {
             Page.RegisterStartupScript("", "<script>alert('座位取消预定成功！');</script>");
@@ -127,7 +126,7 @@ protected void Button1_Click(object sender, EventArgs e)
 protected void btn_lz_Click(object sender, EventArgs e)//离座按钮点击事件
     {
         string username = Session["UserName"].ToString();
-        SeatChoosing mysc = new SeatChoosingService().Get_Objec("UserName='" + username + "'");//声明新的SeatChoosing类的对象mysc中的值获取当前用户的选座表Seat_choosing中的信息
+        SeatChoosing mysc = new SeatChoosingService().Get_Objec("UserName='" + username + "'");
 
         Seat seat2 = new Seat();
         seat2.Status = 0;
@@ -135,7 +134,7 @@ protected void btn_lz_Click(object sender, EventArgs e)//离座按钮点击事�
         seat2.Sid = mysc.Sid;
         bool s2 = new SeatService().ModifyStatus(seat2); //修改Seat表座位状态值为0
 
-        bool f2 = new SeatChoosingService().Delete("UserName='" + Session["UserName"].ToString() + "'");//删除Seat_choosing表中该用户的座位信息
+        bool f2 = new SeatChoosingService().Delete("UserName='" + Session["UserName"].ToString() + "'");
         Page.RegisterStartupScript("", "<script>alert('离座成功！');</script>");
         Response.AddHeader("Refresh", "0");
     }
