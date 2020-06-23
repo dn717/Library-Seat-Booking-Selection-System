@@ -1,17 +1,18 @@
 # user login
+'''
 protected void btn_submit_Click(object sender, EventArgs e)
     {
         string UserName = this.TextBox1.Text.Trim().Replace("'", "");
         string Upasswork = this.TextBox2.Text.Trim().Replace("'", ""); 
-        Users admin = new UsersService().Get_Objec("UserName='" + UserName + "' and Upassword='" + Upasswork + "'");//调用UsersService类的Get_Object方法调取数据库Usere表中的字段信息
+        Users admin = new UsersService().Get_Objec("UserName='" + UserName + "' and Upassword='" + Upasswork + "'");
       Users username = new UsersService().Get_Objec("UserName='"+UserName+"'");
 
        if (admin != null)
         {
             Session["Admin"] = admin;
-            Session.Timeout = 60000; //设置Session的过期时间
+            Session.Timeout = 60000; //Set the expiration time of Session
 
-            if (admin.Type == 0)//管理员类型值为0，学生为1
+            if (admin.Type == 0)//Administrator type value is 0, student is 1
             {
                 Response.Redirect("index.aspx");
             }
@@ -27,8 +28,9 @@ protected void btn_submit_Click(object sender, EventArgs e)
         }
 
 }
-
+'''
 #Book a seat
+'''
 protected void Button2_Click(object sender, EventArgs e)//预定按钮点击事件
     {
         if (textbox1.Text == ""&&lbl_xzzw.Text=="")
@@ -37,15 +39,15 @@ protected void Button2_Click(object sender, EventArgs e)//预定按钮点击事�
         }
         else
         {
-            SeatChoosingService myseatchoosingService = new SeatChoosingService();//为类SeatChoosingService声明新的对象
-            SeatChoosing myseatchoosing = new SeatChoosing();//为类SeatChoosing声明新的对象
+            SeatChoosingService myseatchoosingService = new SeatChoosingService();
+            SeatChoosing myseatchoosing = new SeatChoosing();
 
 
             myseatchoosing.UserName = Session["UserName"].ToString();
             myseatchoosing.Time = DateTime.Parse(textbox1.Text);
             myseatchoosing.Rid = Lable1.Text;
             myseatchoosing.Sid = Convert.ToInt32(lbl_xzzw.Text);
-            int status = new SeatService().Get_Status("Sid='" + lbl_xzzw.Text + "'");//调用SeatService类的Get_Status函数获取当前座位的状态
+            int status = new SeatService().Get_Status("Sid='" + lbl_xzzw.Text + "'");
             if (status == 1 || status == 2)
             {
                 Page.RegisterStartupScript("", "<script>alert('该座位已经预定或占座！');</script>");
@@ -56,7 +58,7 @@ protected void Button2_Click(object sender, EventArgs e)//预定按钮点击事�
                 DateTime t2 = DateTime.Parse(lable_time.Text);
                 if (t1 > t2)
                 {
-                    System.TimeSpan t3 = t1.Subtract(t2);//t1和t2时间之差
+                    System.TimeSpan t3 = t1.Subtract(t2);
                     double n = t3.TotalHours;
                     if (n > 2)
                     {
@@ -64,7 +66,7 @@ protected void Button2_Click(object sender, EventArgs e)//预定按钮点击事�
                     }
                     else
                     {
-                        bool b = new SeatChoosingService().Add(myseatchoosing);//调用SeatChoosingService类的Add函数将myseatchoosing变量加入到表Seat_choosing中
+                        bool b = new SeatChoosingService().Add(myseatchoosing);
                         if (b)
                         {
                             Page.RegisterStartupScript("", "<script>alert('成功预定座位！');</script>");
@@ -72,7 +74,7 @@ protected void Button2_Click(object sender, EventArgs e)//预定按钮点击事�
                             seat.Status = 1;
                             seat.Rid = Lable1.Text;
                             seat.Sid = Convert.ToInt32(lbl_xzzw.Text);
-                            bool s = new SeatService().ModifyStatus(seat);//调用SeatService类的ModifyStatus函数将当前seat的状态改为1
+                            bool s = new SeatService().ModifyStatus(seat);
                         }
                         else
                         {
@@ -88,5 +90,118 @@ protected void Button2_Click(object sender, EventArgs e)//预定按钮点击事�
             }
         }
 
-         Response.AddHeader("Refresh", "0");//页面刷新  
+         Response.AddHeader("Refresh", "0");
+ '''
+ #cancel the book
+'''
+protected void Button1_Click(object sender, EventArgs e)
+    {
+        lbl_xzzw.Text = "";
+        SeatChoosing myseatchoosing = new SeatChoosing();
+        SeatChoosingService myseatchoosingService = new SeatChoosingService();
+        myseatchoosing.UserName = Session["UserName"].ToString();
+        string username = Session["UserName"].ToString();
+        SeatChoosing mysc = new SeatChoosingService().Get_Objec("UserName='" + username + "'");//声明新的SeatChoosing类的对象mysc中的值获取当前用户的选座表Seat_choosing中的信息
+        Seat seat1 = new Seat();
+        seat1.Status = 0;
+        seat1.Rid = mysc.Rid;
+        seat1.Sid = mysc.Sid;
+        bool s1 = new SeatService().ModifyStatus(seat1);//修改Seat表座位状态值为0
+        bool f = new SeatChoosingService().Delete("UserName='"+myseatchoosing.UserName+"'");//删除Seat_choosing表中该用户的座位信息
+        if (f)
+        {
+            Page.RegisterStartupScript("", "<script>alert('座位取消预定成功！');</script>");
+           
+        }
+        else
+        {
+            Page.RegisterStartupScript("", "<script>alert('座位取消预定失败！');</script>");
+        }
+        
+         Response.AddHeader("Refresh", "0"); 
+}
 
+'''
+#Temporarily leave
+'''
+protected void btn_lz_Click(object sender, EventArgs e)//离座按钮点击事件
+    {
+        string username = Session["UserName"].ToString();
+        SeatChoosing mysc = new SeatChoosingService().Get_Objec("UserName='" + username + "'");//声明新的SeatChoosing类的对象mysc中的值获取当前用户的选座表Seat_choosing中的信息
+
+        Seat seat2 = new Seat();
+        seat2.Status = 0;
+        seat2.Rid =mysc.Rid;
+        seat2.Sid = mysc.Sid;
+        bool s2 = new SeatService().ModifyStatus(seat2); //修改Seat表座位状态值为0
+
+        bool f2 = new SeatChoosingService().Delete("UserName='" + Session["UserName"].ToString() + "'");//删除Seat_choosing表中该用户的座位信息
+        Page.RegisterStartupScript("", "<script>alert('离座成功！');</script>");
+        Response.AddHeader("Refresh", "0");
+    }
+
+'''
+#Add and move seats dynamically(administrator)
+'''
+int x = new SeatService().GetCount("Rid='阅览室001'");
+for (int i = 1; i < x+1; i++)
+        {
+            LinkButton linkBtn = new LinkButton();
+            linkBtn.ID = linkBtn + i.ToString();
+            linkBtn.Text = i.ToString();
+            linkBtn.BackColor = System.Drawing.Color.SkyBlue;
+            linkBtn.ForeColor = System.Drawing.Color.Black;
+            linkBtn.Width = 50;
+            linkBtn.CssClass = "style7";
+            linkBtn.BorderWidth = 1;
+            linkBtn.Click += new EventHandler(linb_S_Click);
+            PlaceHolder1.Controls.Add(linkBtn);
+            for (int m = 1; m < 76; m++)
+            {
+                if (i == m * 2)
+                {
+                    Literal litNewHTML3 = new Literal();
+                    litNewHTML3.Text = "&nbsp;&nbsp;&nbsp;&nbsp;";
+                    PlaceHolder1.Controls.Add(litNewHTML3);
+                }
+            }
+            for (int n = 1; n < 11; n++)
+            {
+                if (i == n*14)
+                {
+                    Literal litNewHTML2 = new Literal();
+                    litNewHTML2.Text = "</br>";
+                    PlaceHolder1.Controls.Add(litNewHTML2);
+                }
+            }
+            for (int p = 1; p < 6; p++)
+            {
+                if (i == p * 28)
+                {
+                    Literal litNewHTML = new Literal();
+                    litNewHTML.Text = "</br></br>";
+                    PlaceHolder1.Controls.Add(litNewHTML);//每28个座位空2行
+                }
+            }
+            
+        int status = new SeatService().Get_Status("Rid='阅览室001'and Sid='" + i+ "'");
+            if (status == 0)
+                {
+                    linkBtn.BackColor = System.Drawing.Color.SkyBlue;
+                }
+            else if (status == 1)
+                {
+                   linkBtn.BackColor = System.Drawing.Color.Red; 
+
+                   linkBtn.Enabled = false;
+                }
+             else if (status == 2)
+                {
+                    linkBtn.BackColor = System.Drawing.Color.Gray; 
+                    linkBtn.Enabled = false;
+                }
+
+        }
+       this.Page.FindControl("PlaceHolder1").FindControl("linkBtn");
+
+'''
