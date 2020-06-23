@@ -1,5 +1,5 @@
 # user login
-'''
+```
 protected void btn_submit_Click(object sender, EventArgs e)
     {
         string UserName = this.TextBox1.Text.Trim().Replace("'", "");
@@ -28,7 +28,7 @@ protected void btn_submit_Click(object sender, EventArgs e)
         }
 
 }
-'''
+```
 #Book a seat
 '''
 protected void Button2_Click(object sender, EventArgs e)//预定按钮点击事件
