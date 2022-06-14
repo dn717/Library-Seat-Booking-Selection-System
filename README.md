@@ -1,4 +1,4 @@
-# Library-Seat-Selection-System
+# Library Seat Booking Selection System
 ## Introduction
 Library Seat Booking and Selection System using B/S architecture model, written in C# language, implementing through Visual Studio, using SQL Server to build back-end database, to realize the user’s self-service choice of library seats booking, display and query, short-time retention, cancellation and other functions. The system is combined with entrance guard system to implement validation by swiping card and prevent the occupancy of seats. In order to arrange the seat resources in the library reasonably, convenient for students to grasp the status of the library seats at any time, the library book seat selection system have been developed. The system is visualized, more intuitive and beautiful, convenient for users to operate, is conducive to choose and book seat for students by themselves, greatly improve the utilization rate of the library’s seat. 
 ## module
