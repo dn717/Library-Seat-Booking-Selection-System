@@ -6,7 +6,7 @@ Library Seat Booking and Selection System using B/S architecture model, written 
 ![](https://github.com/dn717/Library-Seat-Selection-System/blob/master/8.jpg)
 ### card read and verification module
 ![](https://github.com/dn717/Library-Seat-Selection-System/blob/master/9.jpg)
-## picutre of interface
+## picutres of interfaces
 ### The login system
 ![](https://github.com/dn717/Library-Seat-Selection-System/blob/master/1.jpg)
 ### User seat selection interface
